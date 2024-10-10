@@ -1,0 +1,525 @@
+syntax = "proto3";
+package aic_api;
+
+option go_package = "github.com/aic/http_idl_gen/gen/aic/data/models";
+
+import "google/protobuf/timestamp.proto";
+
+
+// Profile 
+// Question
+// Metadata 
+  // School
+// Attempt
+
+//--------------------------PROFILE--------------------------------------
+
+message Profile {
+  // Metadata
+  string uid = 1;
+  AccountType account_type = 2;
+
+  // User data
+  string email = 10;
+  string display_picture = 11;
+  string display_name = 12;
+  School school = 13;
+
+  // Affliations
+  repeated Affliation affliations = 20;
+
+  bool is_banned = 200;
+}
+
+enum AccountType {
+  DEFAULT_ACCOUNT = 0;
+
+  USER = 100;
+  VERIFIED_USER = 200;
+  ADMIN = 300;
+}
+
+message Affliation {
+  // Metadata
+  AffliationType affliation_type = 1;
+
+  // School
+  School school = 20;
+
+  // Tuition Centre
+  TuitionCentre tuition_centre = 30; 
+}
+
+enum AffliationType {
+  DEFAULT_AFFLIATION = 0;
+
+  SCHOOL = 100;
+  TUITION_CENTRE = 200;
+}
+
+//--------------------------QUESTION--------------------------------------
+
+message Question {
+  // Metadata
+  string uid = 1;
+  Tier tier = 2;
+  Subject subject = 3;
+  string topic_id = 4;
+
+  // Source
+  School school = 10;
+  string paper_year = 11;
+  string paper_name = 12;
+  Profile uploaded_by = 13;
+  int64 uploaded_at = 14;
+
+  // Question
+  string question_string = 20;
+
+  // Options
+  string option_a = 30;
+  string option_b = 31;
+  string option_c = 32;
+  string option_d = 33;
+
+  // Answer
+  string correct_answer_hash = 40;
+
+  // Analysis
+  QuestionAnalysis question_analysis = 50;
+
+  // User specific data
+  uint64 number_of_attempts = 60;
+}
+
+message QuestionAnalysis {
+  // Metadata
+  string year = 1;
+
+  // Attempts
+  uint64 total_attempts = 10;
+  uint64 correct_attempts = 11;
+  uint64 incorrect_attempts = 12;
+
+  // Analysis
+  uint32 correct_answer_percentage = 20;
+  string average_time_taken = 21;
+
+  // Statistics
+  float sd_time_correct_attempts = 30;
+  float mean_time_correct_attempts = 31;
+
+  // Likes
+  uint64 number_of_likes = 40;
+}
+
+//--------------------------STATISTICS--------------------------------------
+
+message AnswerAnalysis {
+  // Metadata
+  string uid = 1;
+  Option option = 2;
+  bool is_correct = 3;
+
+  // Analysis
+  // TODO
+  AnswerAnalysisBreakdown answer_analysis_breakdown = 10;
+}
+
+enum Option {
+  A = 0;
+  B = 10;
+  C = 20;
+  D = 30;
+}
+
+message AnswerAnalysisBreakdown {
+// TODO
+}
+
+//--------------------------ATTEMPT--------------------------------------
+
+message Attempt {
+  // Metadata
+  string uid = 1;
+  string question_uid = 2;
+  string user_uid = 3;
+
+  // Attempt  
+  Option answer = 10;
+  string time_taken = 11;
+}
+
+//--------------------------SOLUTION--------------------------------------
+
+message Solution {
+  // Metadata
+  string uid = 1;
+  string question_uid = 2;
+  Profile submitted_by = 3;
+
+  // Solution content
+  string solution = 10;
+  repeated string solution_images = 11;
+
+  // Other data
+  uint64 number_of_likes = 20;
+}
+
+//--------------------------DISCUSSION--------------------------------------
+
+message Discussion {
+  // Metadata
+  string uid = 1;
+  string question_uid = 2;
+  Profile submitted_by = 3;
+
+  // Discussion content
+  string discussion = 10;
+  repeated string discussion_images = 11;
+
+  // Other data
+  uint64 number_of_likes = 20;
+  uint64 number_of_comments = 30;
+}
+
+//--------------------------SCHOOL--------------------------------------
+
+message School {
+  // Metadata
+  string uid = 1;
+  string logo_url = 2;
+
+  // School data
+  string name = 10;
+  Tier tier = 11;
+}
+
+message TuitionCentre {
+  // Metadata
+  string uid = 1;
+  string logo_url = 2;
+
+  // Tution Centre data
+  string name = 10;
+  string address = 11;
+  string contact_number = 12;
+  string email = 13;
+  repeated Tier tier = 14;
+}
+
+enum Tier {
+  DEFAULT_TIER = 0;
+
+  PRIMARY = 100;
+  SECONDARY = 200;
+  JC = 300;
+}
+
+enum Subject {
+  DEFAULT_SUBJECT = 0;
+
+  // Primary
+  MATH = 10;
+  SCIENCE = 20;
+  ENGLISH = 30;
+  MOTHER_TONGUE = 40;
+
+  // Secondary
+  ELEMENTARY_MATH = 1000;
+  ADDITIONAL_MATH = 1010;
+  
+  HARD_SCIENCE = 1100;
+  HARD_MATH = 1200;
+  HARD_ENGLISH = 1300;
+  HARD_MOTHER_TONGUE = 1400;
+
+  // JC
+  
+  
+}
+
+
+//--------------------------PAGINATION--------------------------------------
+
+message Pagination {
+  int32 page = 1;
+  int32 page_size = 2;
+  int32 total_pages = 3;
+}
+
+
+// //--------------------------CHAT--------------------------------------
+
+// message Chat {
+//   string id = 1;
+//   bool is_opened = 2;
+//   map<string, string> display_title = 3;
+//   google.protobuf.Timestamp expiry = 4;
+//   bool is_reported = 5;
+
+//   repeated string participants = 10;
+//   repeated ReducedProfile participants_meta = 11;
+//   repeated ReducedProfile interested_users = 12;
+
+//   repeated CoffeeRequest coffee_requests = 20;
+
+//   TopicSettings topic_settings = 30;
+//   string topic_id = 31;
+  
+//   Message last_message = 40;
+// }
+
+// message NewChat {
+//   string id = 1;
+//   bool is_opened = 2;
+//   repeated string participants = 3;
+//   repeated ReducedProfile interested_users = 4;
+//   repeated CoffeeRequest coffee_requests = 5;
+//   TopicSettings topic_settings = 6;
+//   repeated string unopened_topic_ids = 8;
+//   Message last_message = 9;
+//   google.protobuf.Timestamp expiry = 10;
+//   map<string, string> display_title = 11;
+// }
+
+// message Message {
+//   string id = 1;
+//   string content = 2;
+//   string room_id = 3;
+//   string sender = 4;
+//   google.protobuf.Timestamp timestamp = 5;
+// }
+  
+//   message TopicSettings {
+//     string title = 1;
+//     string description = 2;
+
+//     string chat_id = 10;
+//     string new_topic_id = 11;
+
+//     int32 participants_limit = 20;
+
+//     repeated string tags = 30;
+
+//     repeated string preferred_location = 40;
+
+//     google.protobuf.Timestamp preferred_time = 50;
+
+//     string topic_category = 60;
+
+//     repeated string industry = 70;
+
+//     repeated string target_audience = 80;
+// }
+
+
+//   //--------------------------TOPIC--------------------------------------
+
+
+//   message NewTopic {
+//     string id = 1;
+//     string creator = 2;
+//     ContentType content_type = 3;
+
+//     repeated string participants = 10;
+
+//     TopicSettings topic_settings = 20;
+// }
+
+
+
+// //--------------------------HOME--------------------------------------
+
+// message HomeContent {
+//   ContentType content_type = 1;
+
+//   Topic topic = 10;
+
+//   PublicProfile profile = 20;
+
+//   Event event = 30;
+
+//   Advertisement advertisement = 40;
+  
+// }
+
+// //--------------------------INTERACT--------------------------------------
+// message Interaction {
+//   string id = 1;
+//   string topic_id = 2;
+//   string self = 3;
+//   string other_user_id = 4;
+//   ContentType content_type = 5;
+//   string chat_id = 6;
+// }
+
+// message CoffeeRequest {
+//   string id = 1;
+//   string topic_id = 2;
+//   string target_id = 3;
+//   google.protobuf.Timestamp timestamp = 4;
+
+//   ProfileLinkedIn from_meta = 10;
+//   string text = 11;
+  
+//   ContentType content_type = 20;
+
+//   Topic topic_meta = 30;
+//   Event event_meta = 31;
+// }
+
+// message History {
+//   string id = 1;
+//   repeated string history = 2;
+// }
+
+
+// //-------------------------COMMON---------------------------------------
+// message Pagination {
+//   int32 page = 1;           // Page number, 1-indexed
+//   int32 per_page = 2;       // Number of items per page
+//   int32 last_page = 3;      // Last page
+// }
+
+// enum ContentType {
+//   DEFAULT = 0;
+  
+//   UNOPENED_TOPIC = 100;
+
+//   OPENED_TOPIC = 200;
+
+//   PROFILE = 300;
+
+//   ADVERTISEMENT = 400;
+
+//   EVENT = 500;
+
+//   CHAT = 600;
+// }
+
+
+// //-------------------------EVENT---------------------------------------
+
+// message Event {
+//   string id = 1;
+//   string title = 2;
+//   string description = 3;
+//   string location = 4;
+//   google.protobuf.Timestamp datetime = 5;
+//   repeated string tags = 6;
+
+//   google.protobuf.Timestamp expiry_date = 11;
+
+//   string company_name = 20;
+//   string company_picture_url = 21;
+
+//   EventType event_type = 30;
+
+//   string passcode = 40;
+//   string instruction = 41;
+
+//   repeated string participant_types = 50;
+
+//   int64 participant_limit = 60;
+
+//   repeated EventFeatured event_featured = 70;
+
+//   string registration_link = 80;
+// }
+
+// enum EventType {
+//   DEFAULT_EVENT = 0;
+
+//   PRIVATE_EVENT = 100;
+
+//   PUBLIC_EVENT = 200;
+// }
+
+// message EventMember {
+//   string id = 1;
+//   string profile_id = 2;
+//   string event_id = 3;
+
+//   ProfileLinkedIn profile_linkedin = 10;
+
+//   string introduction = 20;
+
+//   string participant_type = 30;
+// }
+
+// message EventFeatured {
+//   string profile_id = 1; // if user has a aic profile
+
+//   ProfileLinkedIn user_meta = 20; // user does not have aic profile
+  
+//   string linked_in_link = 30;
+
+//   string introduction = 40;
+
+//   string participant_type = 50;
+// }
+
+// //-------------------------ADVERTISEMENT---------------------------------------
+// message Advertisement {
+//   string id = 1;
+//   string company_id = 2;
+
+//   string advertisement_title = 10;
+//   repeated string tags = 11;
+//   int64 impression = 12;
+//   bool status = 13;
+
+//   ContentType content_type = 20;
+
+//   string image_url = 30;
+//   string redirect_url = 31;
+  
+//   google.protobuf.Timestamp start_date = 40;
+//   google.protobuf.Timestamp end_date = 41;
+// }
+
+// message Company {
+//   string id = 1;
+//   string company_name = 2;
+// }
+
+// //-------------------------FEEDBACK------------------------------------
+
+// message Feedback {
+//   string id = 1; // use helper function to generate feedback id
+//   FeedbackType feedback_type = 2;
+  
+//   string user_id = 10; 
+//   string user_email = 11; // query database to fetch email
+  
+//   string platform = 20; // get from Platform.OS
+//   string version = 21;
+  
+//   string text = 30;    
+  
+//   google.protobuf.Timestamp submit_time = 40;
+// }
+
+// enum FeedbackType {
+//   BUG = 0;
+  
+//   FEEDBACK = 10;
+// }
+
+// message Report {
+//   string id = 1; // use helper function to generate
+
+//   string reporter_user_id = 10; 
+//   string reported_user_id = 11;
+
+//   string text = 20;
+
+//   ContentType content_type = 30;
+
+//   string chat_id = 40;
+//   string topic_id = 41;
+//   string profile_id = 42;
+  
+//   google.protobuf.Timestamp submit_time = 50;
+// }

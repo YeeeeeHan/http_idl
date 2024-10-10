@@ -1,0 +1,41 @@
+syntax = "proto3";
+package aic_api;
+
+option go_package = "github.com/aic/http_idl_gen/gen/aic/data/models";
+
+import "aic/data/aic_api/models.proto";
+
+message QuestionFilter {
+    // Tier
+    repeated Tier tiers = 1;
+    // School
+    repeated string school_uids = 10;
+    // Paper Year
+    repeated string paper_years = 20;
+    // Question
+    repeated string question_uids = 30;
+
+    // Uploaded metadata
+    int64 uploaded_after = 40;
+    int64 uploaded_by_uid = 41;
+    int64 uploaded_before = 42;
+
+    // Analysis
+    int64 wrong_answer_percentage = 50;
+    int64 attempts = 51;
+    int64 number_of_likes = 52;
+    int64 number_of_my_attempts = 53;
+    int64 mean_time_first_attempts = 54;
+}
+
+message GetQuestionsRequestParams {
+    QuestionFilter filter = 1;
+    Pagination pagination = 2;
+}
+
+message GetQuestionsResponseData {
+    repeated Question questions = 1;
+    Pagination pagination = 2;
+}
+
+

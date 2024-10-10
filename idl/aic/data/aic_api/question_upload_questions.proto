@@ -1,0 +1,13 @@
+syntax = "proto3";
+package aic_api;
+
+option go_package = "github.com/aic/http_idl_gen/gen/aic/data/models";
+import "aic/data/aic_api/models.proto";
+
+message UploadQuestionsRequestParams {
+    repeated Question questions = 1;
+}
+
+message UploadQuestionsResponseData {
+    string message = 1;
+}

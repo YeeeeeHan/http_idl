@@ -1,0 +1,109 @@
+syntax = "proto3";
+package aic_api;
+
+import "api.proto";
+
+import "aic/data/aic_api/auth_sign_in.proto";
+import "aic/data/aic_api/auth_sign_out.proto";
+import "aic/data/aic_api/profile_me.proto";
+import "aic/data/aic_api/question_get_questions.proto";
+import "aic/data/aic_api/question_upload_questions.proto";
+// ----------------------------AUTH------------------------------------
+
+message SignInRequest {
+    aic_api.SignInRequestParams request = 1;
+}
+
+message SignInResponse {
+    int32 code = 1;
+    string message = 2;
+    aic_api.SignInResponseData data = 3;
+}
+
+message SignOutRequest {
+    aic_api.SignOutRequestParams request = 1;
+}
+
+message SignOutResponse {
+    int32 code = 1;
+    string message = 2;
+    aic_api.SignOutResponseData data = 3;
+}
+
+// ----------------------------PROFILE------------------------------------
+
+message GetMyProfileRequest {
+    aic_api.GetMyProfileRequestParams request = 1;
+}
+
+message GetMyProfileResponse {
+    int32 code = 1;
+    string message = 2;
+    aic_api.GetMyProfileResponseData data = 3;
+}
+
+// ----------------------------QUESTION------------------------------------
+
+message GetQuestionsRequest {
+    aic_api.GetQuestionsRequestParams request = 1;
+}
+
+message GetQuestionsResponse {
+    int32 code = 1;
+    string message = 2;
+    aic_api.GetQuestionsResponseData data = 3;
+}
+
+message UploadQuestionsRequest {
+    aic_api.UploadQuestionsRequestParams request = 1;
+}
+
+message UploadQuestionsResponse {
+    int32 code = 1;
+    string message = 2;
+    aic_api.UploadQuestionsResponseData data = 3;
+}
+
+service hertz {
+
+    // ----------------------------AUTH------------------------------------
+
+    //SignInQuery 
+    rpc SignInQuery(SignInRequest) returns (SignInResponse){ 
+        option (api.post) = "/api/v:version/aic/auth/signin";
+        option (api.serializer) = "json";
+        option (api.resp_serializer) = "json";
+    }
+
+    //SignOutQuery 
+    rpc SignOutQuery(SignOutRequest) returns (SignOutResponse){ 
+        option (api.post) = "/api/v:version/aic/auth/signout";
+        option (api.serializer) = "json";
+        option (api.resp_serializer) = "json";
+    }
+
+    // ----------------------------PROFILE------------------------------------
+
+    //GetMyProfileQuery 
+    rpc GetMyProfileQuery(GetMyProfileRequest) returns (GetMyProfileResponse){ 
+        option (api.post) = "/api/v:version/aic/profiles/me";
+        option (api.serializer) = "json";
+        option (api.resp_serializer) = "json";
+    }
+
+    // ----------------------------QUESTION------------------------------------
+
+    //GetQuestionsQuery 
+    rpc GetQuestionsQuery(GetQuestionsRequest) returns (GetQuestionsResponse){ 
+        option (api.post) = "/api/v:version/aic/questions/get";
+        option (api.serializer) = "json";
+        option (api.resp_serializer) = "json";
+    }
+
+    //UploadQuestionsQuery 
+    rpc UploadQuestionsQuery(UploadQuestionsRequest) returns (UploadQuestionsResponse){ 
+        option (api.post) = "/api/v:version/aic/questions/upload";
+        option (api.serializer) = "json";
+        option (api.resp_serializer) = "json";
+    }
+}

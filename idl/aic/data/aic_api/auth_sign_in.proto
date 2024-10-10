@@ -1,0 +1,16 @@
+syntax = "proto3";
+package aic_api;
+
+option go_package = "github.com/aic/http_idl_gen/gen/aic/data/models";
+
+message SignInRequestParams {
+    string code = 1;
+}
+
+message SignInResponseData {
+    string jwttoken = 3;
+    string linkedin_id = 4;
+    string id = 5;
+    bool is_new_user = 6;
+}
+

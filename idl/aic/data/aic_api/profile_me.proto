@@ -1,0 +1,12 @@
+syntax = "proto3";
+package aic_api;
+
+option go_package = "github.com/aic/http_idl_gen/gen/aic/data/models";
+import "aic/data/aic_api/models.proto";
+message GetMyProfileRequestParams {
+    string profile_header = 1;
+}
+
+message GetMyProfileResponseData {
+    Profile profile = 1;
+}
